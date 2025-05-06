@@ -1,0 +1,5 @@
+﻿{
+  "testName": "TestGroovy",
+  "parameters": {},
+  "script": "def runTest() { return 'Test exécuté avec succès' }\nrunTest()"
+}

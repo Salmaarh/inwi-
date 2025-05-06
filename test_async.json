@@ -1,0 +1,5 @@
+﻿{
+  "testName": "TestAsync",
+  "parameters": {},
+  "script": "def runTest() { return 'Test async terminé' }\nrunTest()"
+}

@@ -1,0 +1,4 @@
+{
+  "testName": "Groovy Test 1",
+  "script": "def runTest() { return 'Test exécuté avec succès' }; runTest()"
+}

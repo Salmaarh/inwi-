@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Tableau de bord - Tests INWI</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #EC008C, #EC005C, #2c5364);
+            color: #f0f0f0;
+            padding: 30px;
+        }
+        h1 {
+            text-align: center;
+            color: #ffffff;
+        }
+        .card {
+            background: #1e2a38;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        input, textarea, button, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+        }
+        button {
+            background-color: #3fb68b;
+            color: white;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #37a17a;
+        }
+        pre {
+            background-color: #111;
+            padding: 10px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+<h1>Tableau de Bord d'Exécution des Tests</h1>
+
+<div class="card">
+    <h2>▶️ Exécuter un script Groovy</h2>
+    <textarea id="script" rows="6">def runTest() {
+    return "Test réussi"
+}
+runTest()</textarea>
+    <button onclick="runTest()">Exécuter</button>
+    <pre id="result"></pre>
+</div>
+
+<div class="card">
+    <h2>⚙️ Exécution Asynchrone</h2>
+    <input type="text" id="asyncName" placeholder="Nom du test">
+    <textarea id="asyncScript" rows="4">def runTest() {
+    return "Async test..."
+}
+runTest()</textarea>
+    <button onclick="runAsync()">Soumettre en async</button>
+    <pre id="asyncResult"></pre>
+</div>
+
+<div class="card">
+    <h2>⛔ Annuler un test</h2>
+    <input type="number" id="cancelId" placeholder="ID du test">
+    <button onclick="cancelTest()">Annuler</button>
+    <pre id="cancelResult"></pre>
+</div>
+
+<div class="card">
+    <h2>📄 Voir les logs</h2>
+    <input type="number" id="logId" placeholder="ID du test">
+    <button onclick="getLogs()">Afficher les logs</button>
+    <pre id="logResult"></pre>
+</div>
+
+<div class="card">
+    <h2>📊 Filtrer par statut</h2>
+    <select id="statusFilter">
+        <option value="ALL">Tous</option>
+        <option value="RUNNING">RUNNING</option>
+        <option value="SUCCESS">SUCCESS</option>
+        <option value="FAILED">FAILED</option>
+        <option value="CANCELLED">CANCELLED</option>
+    </select>
+    <button onclick="filterTests()">Filtrer</button>
+    <pre id="filterResult"></pre>
+</div>
+
+<script>
+    const api = 'http://localhost:9090/api/tests';
+
+    async function runTest() {
+        const script = document.getElementById('script').value;
+        const response = await fetch(`${api}/execute`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ testName: "UI-Groovy", script })
+        });
+        document.getElementById('result').innerText = await response.text();
+    }
+
+    async function runAsync() {
+        const testName = document.getElementById('asyncName').value;
+        const script = document.getElementById('asyncScript').value;
+        const response = await fetch(`${api}/async`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ testName, script })
+        });
+        document.getElementById('asyncResult').innerText = await response.text();
+    }
+
+    async function cancelTest() {
+        const id = document.getElementById('cancelId').value;
+        const response = await fetch(`${api}/cancel/${id}`, { method: 'POST' });
+        document.getElementById('cancelResult').innerText = await response.text();
+    }
+
+    async function getLogs() {
+        const id = document.getElementById('logId').value;
+        const response = await fetch(`${api}/logs/${id}`);
+        document.getElementById('logResult').innerText = await response.text();
+    }
+
+    async function filterTests() {
+        const status = document.getElementById('statusFilter').value;
+        const response = await fetch(`${api}/status?status=${status}`);
+        const data = await response.json();
+        document.getElementById('filterResult').innerText = JSON.stringify(data, null, 2);
+    }
+</script>
+</body>
+</html>

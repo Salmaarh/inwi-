@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard des Tests Automatisés</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-light">
+
+<div class="container py-5">
+    <h1 class="mb-4 text-center">Dashboard des Tests Automatisés</h1>
+
+    <!-- Formulaire d'exécution -->
+    <form id="testForm" class="mb-4">
+        <div class="mb-3">
+            <label for="testName" class="form-label">Nom du Test</label>
+            <input type="text" class="form-control" id="testName" required>
+        </div>
+        <div class="mb-3">
+            <label for="script" class="form-label">Script Groovy</label>
+            <textarea class="form-control" id="script" rows="5" required>return "Hello world"</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Lancer le test</button>
+    </form>
+
+    <!-- Résultat -->
+    <div id="result" class="alert alert-info d-none"></div>
+
+    <!-- Liste des tests -->
+    <h2 class="mt-5">📋 Historique des Tests</h2>
+    <div class="mb-3">
+        <select id="statusFilter" class="form-select w-25">
+            <option value="ALL">Tous</option>
+            <option value="SUCCESS">SUCCESS</option>
+            <option value="FAILED">FAILED</option>
+            <option value="RUNNING">RUNNING</option>
+            <option value="CANCELLED">CANCELLED</option>
+        </select>
+    </div>
+    <table class="table table-bordered table-hover table-dark">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Statut</th>
+            <th>Logs</th>
+        </tr>
+        </thead>
+        <tbody id="testTableBody"></tbody>
+    </table>
+</div>
+
+<script>
+    const apiUrl = "http://localhost:9090/api/tests";
+
+    // Lancer un test
+    document.getElementById("testForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const testName = document.getElementById("testName").value;
+        const script = document.getElementById("script").value;
+
+        const response = await fetch(`${apiUrl}/execute`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ testName, script })
+        });
+
+        const data = await response.json();
+        document.getElementById("result").classList.remove("d-none");
+        document.getElementById("result").innerText = `Test ${data.status} - ID ${data.testId}`;
+        loadTests();
+    });
+
+    // Filtrage des tests
+    document.getElementById("statusFilter").addEventListener("change", loadTests);
+
+    // Charger les tests
+    async function loadTests() {
+        const status = document.getElementById("statusFilter").value;
+        const response = await fetch(`${apiUrl}/status?status=${status}`);
+        const tests = await response.json();
+
+        const tableBody = document.getElementById("testTableBody");
+        tableBody.innerHTML = "";
+
+        for (let test of tests) {
+            const row = `
+                <tr>
+                    <td>${test.id}</td>
+                    <td>${test.status}</td>
+                    <td><pre>${test.logs}</pre></td>
+                </tr>`;
+            tableBody.innerHTML += row;
+        }
+    }
+
+    // Initialiser
+    loadTests();
+</script>
+
+</body>
+</html>
