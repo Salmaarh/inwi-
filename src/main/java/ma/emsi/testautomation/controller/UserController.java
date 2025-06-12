@@ -1,14 +1,14 @@
 package ma.emsi.testautomation.controller;
 
-import jakarta.persistence.JoinTable;
-import ma.emsi.testautomation.entity.Role;
+import jakarta.annotation.security.RolesAllowed;
 import ma.emsi.testautomation.model.AppUser;
 import ma.emsi.testautomation.service.UserService;
+import org.apache.xmlbeans.impl.xb.ltgfmt.TestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -55,6 +55,7 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+
     // Enregistrement d’un nouvel utilisateur (alias de createUser)
     @PostMapping("/register")
     public ResponseEntity<AppUser> register(@RequestBody AppUser user) {
@@ -62,4 +63,6 @@ public class UserController {
         return ResponseEntity.ok(created);
     }
 
-}
+    }
+
+

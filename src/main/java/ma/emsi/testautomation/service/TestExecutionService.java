@@ -1,7 +1,7 @@
 package ma.emsi.testautomation.service;
 
 import ma.emsi.testautomation.entity.TestExecution;
-import ma.emsi.testautomation.repository.TestExecutionRepository;
+import ma.emsi.testautomation.repository.WebServiceExecutor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -9,10 +9,10 @@ import java.util.List;
 
 @Service
 public class TestExecutionService {
-    private final TestExecutionRepository repository;
+    private final WebServiceExecutor repository;
 
-    public TestExecutionService(TestExecutionRepository repository) {
-        this.repository = repository;
+    public TestExecutionService(WebServiceExecutor Repository) {
+        this.repository = Repository;
     }
 
     public TestExecution runTest(String testName) {

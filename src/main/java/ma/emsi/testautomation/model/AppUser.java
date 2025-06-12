@@ -13,12 +13,14 @@ public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+@Column(unique = true)
     private String username;
     private String email;
     private String password;
     private LocalDate passwordExpirationDate;
 
+    private String firstName; //  Added
+    private String lastName;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "USER_ROLE",
@@ -29,8 +31,12 @@ public class AppUser {
 
 
     // --- Getters et Setters ---
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
 
-    public Long getId() { return id; }
+    public String getLastName() { return lastName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
+     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
     public String getUsername() { return username; }
