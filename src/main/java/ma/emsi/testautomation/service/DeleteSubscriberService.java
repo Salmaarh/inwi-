@@ -1,18 +1,13 @@
 package ma.emsi.testautomation.service;
-
-import ma.emsi.testautomation.entity.TestExecution;
-import org.springframework.stereotype.Component;
-import ma.emsi.testautomation.repository.WebServiceExecutor;
-import java.util.Collections;
-import java.util.List;
+import org.springframework.stereotype.Service;
 import java.util.Map;
 
-@Component("DeleteSubscriber")
+@Service("DeleteSubscriber")
 public class DeleteSubscriberService implements WebServiceExecutor {
+
     @Override
     public String execute(Map<String, Object> params) {
+        // Your actual DeleteSubscriber logic here
         return "✅ DeleteSubscriber exécuté avec succès";
     }
-    public List<TestExecution> findAll() { return List.of(); }
-    public TestExecution save(TestExecution t) { return null; }
 }

@@ -2,8 +2,8 @@ package ma.emsi.testautomation.registry;
 
 import ma.emsi.testautomation.entity.CreateSubscriber;
 import ma.emsi.testautomation.entity.*;
+import ma.emsi.testautomation.service.AdjustAccountService;
 import ma.emsi.testautomation.service.WebServiceExecutor;
-import ma.emsi.testautomation.service.createsubscriberService;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -14,7 +14,7 @@ public class WebServiceRegistry {
 
     private final Map<String, WebServiceExecutor> registry = new HashMap<>();
 
-    public void register(String key, createsubscriberService executor) {
+    public void register(String key, AdjustAccountService executor) {
         registry.put(key, executor);
     }
 

@@ -1,7 +1,8 @@
 package ma.emsi.testautomation.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+
+import java.util.Date;
 
 @Entity
 public class ScenarioExecutionLog {
@@ -16,7 +17,7 @@ public class ScenarioExecutionLog {
 
     private String result;
 
-    private LocalDateTime executionTime;
+    private Date executionTime;
 
     // Getters et Setters
     public Long getId() { return id; }
@@ -34,6 +35,9 @@ public class ScenarioExecutionLog {
     public String getResult() { return result; }
     public void setResult(String result) { this.result = result; }
 
-    public LocalDateTime getExecutionTime() { return executionTime; }
-    public void setExecutionTime(LocalDateTime executionTime) { this.executionTime = executionTime; }
+    public Date getExecutionTime() { return executionTime; }
+    public void setExecutionTime(Date executionTime) { this.executionTime = executionTime; }
+
+    public void setStatus(String success) {
+    }
 }
